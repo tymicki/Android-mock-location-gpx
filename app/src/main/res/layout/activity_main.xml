@@ -13,10 +13,10 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:text="@string/app_status_label"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/mockLocationPermission" />
 
     <TextView
         android:id="@+id/appStatus"
@@ -126,5 +126,28 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/startContinuousButton" />
+
+    <TextView
+        android:id="@+id/mockLocationPermission"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/mock_location_not_granted"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/enableMockLocation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/enable_mock_location"
+        android:textSize="10sp"
+        android:visibility="visible"
+        app:layout_constraintBaseline_toBaselineOf="@+id/mockLocationPermission"
+        app:layout_constraintStart_toEndOf="@+id/mockLocationPermission" />
 
 </android.support.constraint.ConstraintLayout>

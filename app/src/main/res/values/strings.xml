@@ -37,5 +37,9 @@
     <string name="test_interrupted">Continuous testing interrupted by user.</string>
     <string name="no_service">The test service is not running</string>
     <string name="stop_service">Sent request to stop testing</string>
+    <string name="test_signal_mock_location">Test mock location permission</string>
+    <string name="mock_location_granted">Mock location permission is granted</string>
+    <string name="mock_location_not_granted">mock location not granted</string>
+    <string name="enable_mock_location">set mock location app</string>
 
 </resources>
