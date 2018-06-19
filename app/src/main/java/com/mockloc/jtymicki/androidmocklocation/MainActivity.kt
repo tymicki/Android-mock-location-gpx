@@ -1,16 +1,27 @@
 package com.mockloc.jtymicki.androidmocklocation
 
+import android.Manifest
 import android.app.AppOpsManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.Settings
+import android.support.v4.app.ActivityCompat
+import android.support.v4.app.ActivityCompat.checkSelfPermission
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
-import kotlinx.android.synthetic.main.activity_main.*;
+import kotlinx.android.synthetic.main.activity_main.*
+import java.io.File
 
+
+private val i: Int by lazy {
+    1
+}
 
 /**
  * Interface to the SendMockLocationService that sends mock locations into Location Services.
@@ -32,6 +43,9 @@ import kotlinx.android.synthetic.main.activity_main.*;
  * </li>
  */
 class MainActivity : AppCompatActivity() {
+    private val TAG = "MainActivity"
+    private val MOCK_TRACK_DATA_FILENAME = "mock_track"
+    private val PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,11 +53,37 @@ class MainActivity : AppCompatActivity() {
         enableMockLocation.setOnClickListener {
             startActivity(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS))
         }
+        // open file /sdcard/Download/mock_track.gpx
     }
+
 
     override fun onStart() {
         super.onStart()
         handleMockLocationAccess()
+
+        handleStorage()
+    }
+
+    private fun handleStorage() {
+        if (checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            Log.i(TAG, "READ_EXTERNAL_STORAGE granted ")
+            if (isExternalStorageReadable()) {
+                Log.i(TAG, "externals storage is readable")
+                val file = File(this.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), MOCK_TRACK_DATA_FILENAME)
+                if (file?.exists()) {
+                    Log.i(TAG, "data file exists")
+                } else {
+                    Log.i(TAG, "data file doesn't exist")
+                }
+            }
+        } else {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), PERMISSION_REQUEST_READ_EXTERNAL_STORAGE)
+        }
+    }
+
+    private fun isExternalStorageReadable(): Boolean {
+        return Environment.getExternalStorageState() in
+                setOf(Environment.MEDIA_MOUNTED, Environment.MEDIA_MOUNTED_READ_ONLY)
     }
 
     private fun handleMockLocationAccess() {
