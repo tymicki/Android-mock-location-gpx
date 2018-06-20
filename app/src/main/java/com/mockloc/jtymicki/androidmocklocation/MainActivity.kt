@@ -16,12 +16,10 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.experimental.launch
+import java.io.BufferedReader
 import java.io.File
 
-
-private val i: Int by lazy {
-    1
-}
 
 /**
  * Interface to the SendMockLocationService that sends mock locations into Location Services.
@@ -43,9 +41,11 @@ private val i: Int by lazy {
  * </li>
  */
 class MainActivity : AppCompatActivity() {
-    private val TAG = "MainActivity"
-    private val MOCK_TRACK_DATA_FILENAME = "mock_track.gpx" // /sdcard/Download/mock_track.gpx
-    private val PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 1
+    companion object {
+        const val TAG = "MainActivity"
+        const val MOCK_TRACK_DATA_FILENAME = "mock_track.gpx"
+        const val PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 1
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +53,6 @@ class MainActivity : AppCompatActivity() {
         enableMockLocation.setOnClickListener {
             startActivity(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS))
         }
-        // open file /sdcard/Download/mock_track.gpx
     }
 
 
@@ -65,20 +64,38 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleStorage() {
-        if (checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        if (checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             Log.i(TAG, "READ_EXTERNAL_STORAGE granted ")
-            if (isExternalStorageReadable()) {
-                Log.i(TAG, "externals storage is readable")
-                val downloadsPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath;
-                val file = File("""${downloadsPath}/${MOCK_TRACK_DATA_FILENAME}""")
-                if (file?.exists()) {
-                    Log.i(TAG, "data file exists")
-                } else {
-                    Log.i(TAG, "data file doesn't exist")
-                }
-            }
+            readGPXData()
         } else {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), PERMISSION_REQUEST_READ_EXTERNAL_STORAGE)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSION_REQUEST_READ_EXTERNAL_STORAGE &&
+                permissions[0] == Manifest.permission.READ_EXTERNAL_STORAGE &&
+                grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            readGPXData()
+        }
+    }
+
+    private fun readGPXData() {
+        if (isExternalStorageReadable()) {
+            Log.i(TAG, "externals storage is readable")
+            val downloadsPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath;
+            val file = File("""${downloadsPath}/${MOCK_TRACK_DATA_FILENAME}""")
+            if (file?.exists()) {
+                Log.i(TAG, "data file exists")
+                launch {
+                    val bufferedReader: BufferedReader = file.bufferedReader()
+                    val inputString = bufferedReader.use { it.readText() }
+                    Log.i(TAG, inputString)
+                }
+            } else {
+                Log.i(TAG, "data file doesn't exist")
+            }
         }
     }
 
