@@ -44,7 +44,7 @@ private val i: Int by lazy {
  */
 class MainActivity : AppCompatActivity() {
     private val TAG = "MainActivity"
-    private val MOCK_TRACK_DATA_FILENAME = "mock_track"
+    private val MOCK_TRACK_DATA_FILENAME = "mock_track.gpx" // /sdcard/Download/mock_track.gpx
     private val PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +69,9 @@ class MainActivity : AppCompatActivity() {
             Log.i(TAG, "READ_EXTERNAL_STORAGE granted ")
             if (isExternalStorageReadable()) {
                 Log.i(TAG, "externals storage is readable")
-                val file = File(this.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), MOCK_TRACK_DATA_FILENAME)
+                val downloadsPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath;
+                val dataFile = """${downloadsPath}/${MOCK_TRACK_DATA_FILENAME}"""
+                val file = File(dataFile)
                 if (file?.exists()) {
                     Log.i(TAG, "data file exists")
                 } else {
