@@ -23,6 +23,8 @@ class ParseItems {
                     XmlPullParser.START_TAG -> {
                         if (tagName == "trkpt") {
                             inItem = true
+                            currentRecord.lat = xpp.getAttributeValue(null, "lat").toDouble()
+                            currentRecord.lon = xpp.getAttributeValue(null, "lon").toDouble()
                         }
                     }
                     XmlPullParser.TEXT -> textValue = xpp.text
@@ -30,13 +32,10 @@ class ParseItems {
                         if (inItem) {
                             when (tagName) {
                                 "trkpt" -> {
-                                    val lat = xpp.getAttributeValue(null, "lat")
                                     items.add(currentRecord)
                                     inItem = false
                                     currentRecord = TrackingPoint()
                                 }
-//                                "lat" -> currentRecord.lat = textValue.toDouble()
-//                                "lon" -> currentRecord.lon = textValue.toDouble()
                                 "ele" -> currentRecord.ele = textValue.toDouble()
                                 "time" -> currentRecord.trackingPointtime = textValue
                             }

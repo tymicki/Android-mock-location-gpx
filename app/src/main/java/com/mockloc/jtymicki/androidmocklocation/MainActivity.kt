@@ -81,6 +81,12 @@ class MainActivity : AppCompatActivity() {
                 Log.i(TAG, inputString)
                 val parseItems = ParseItems()
                 parseItems.parse(inputString)
+                for (item in parseItems.items) {
+                    Log.i(TAG, "lat= ${item.lat}")
+                    Log.i(TAG, "lon= ${item.lon}")
+                    Log.i(TAG, "ele= ${item.ele}")
+                    Log.i(TAG, "time= ${item.trackingPointtime}")
+                }
             } else {
                 Log.i(TAG, "data file doesn't exist")
             }
