@@ -16,7 +16,6 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.experimental.launch
 import java.io.BufferedReader
 import java.io.File
 
@@ -88,11 +87,10 @@ class MainActivity : AppCompatActivity() {
             val file = File("""${downloadsPath}/${MOCK_TRACK_DATA_FILENAME}""")
             if (file?.exists()) {
                 Log.i(TAG, "data file exists")
-                launch {
-                    val bufferedReader: BufferedReader = file.bufferedReader()
-                    val inputString = bufferedReader.use { it.readText() }
-                    Log.i(TAG, inputString)
-                }
+
+                val bufferedReader: BufferedReader = file.bufferedReader()
+                val inputString = bufferedReader.use { it.readText() }
+                Log.i(TAG, inputString)
             } else {
                 Log.i(TAG, "data file doesn't exist")
             }
