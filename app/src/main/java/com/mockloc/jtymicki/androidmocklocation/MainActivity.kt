@@ -20,25 +20,13 @@ import java.io.BufferedReader
 import java.io.File
 
 
-/**
- * Interface to the SendMockLocationService that sends mock locations into Location Services.
- *
- * This Activity collects parameters from the UI, sends them to the Service, and receives back
- * status messages from the Service.
- * <p>
- * The following parameters are sent:
- * <ul>
- * <li><b>Type of test:</b> one-time cycle through the mock locations, or continuous sending</li>
- * <li><b>Pause interval:</b> Amount of time (in seconds) to wait before starting mock location
- * sending. This pause allows the tester to switch to the app under test before sending begins.
- * </li>
- * <li><b>Send interval:</b> Amount of time (in seconds) before sending a new location.
- * This time is unrelated to the update interval requested by the app under test. For example, the
- * app under test can request updates every second, and the tester can request a mock location
- * send every five seconds. In this case, the app under test will receive the same location 5
- * times before a new location becomes available.
- * </li>
- */
+class TrackingPoint {
+    var lat = 0.0
+    var lon = 0.0
+    var ele = 0.0
+    var trackingPointtime = ""
+}
+
 class MainActivity : AppCompatActivity() {
     companion object {
         const val TAG = "MainActivity"
@@ -91,6 +79,8 @@ class MainActivity : AppCompatActivity() {
                 val bufferedReader: BufferedReader = file.bufferedReader()
                 val inputString = bufferedReader.use { it.readText() }
                 Log.i(TAG, inputString)
+                val parseItems = ParseItems()
+                parseItems.parse(inputString)
             } else {
                 Log.i(TAG, "data file doesn't exist")
             }
