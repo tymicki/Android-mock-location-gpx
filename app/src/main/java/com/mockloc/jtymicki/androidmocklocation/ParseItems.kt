@@ -30,12 +30,13 @@ class ParseItems {
                         if (inItem) {
                             when (tagName) {
                                 "trkpt" -> {
+                                    val lat = xpp.getAttributeValue(null, "lat")
                                     items.add(currentRecord)
                                     inItem = false
                                     currentRecord = TrackingPoint()
                                 }
-                                "lat" -> currentRecord.lat = textValue.toDouble()
-                                "lon" -> currentRecord.lon = textValue.toDouble()
+//                                "lat" -> currentRecord.lat = textValue.toDouble()
+//                                "lon" -> currentRecord.lon = textValue.toDouble()
                                 "ele" -> currentRecord.ele = textValue.toDouble()
                                 "time" -> currentRecord.trackingPointtime = textValue
                             }
