@@ -1,10 +1,17 @@
 package com.mockloc.jtymicki.androidmocklocation
 
+import android.util.Log
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
+import java.text.SimpleDateFormat
 
 class ParseItems {
+    companion object {
+        const val TAG = "MainActivity"
+    }
+
     val items = ArrayList<TrackingPoint>()
+    var dateFormat = SimpleDateFormat("yyyy-mm-dd'T'hh:mm:ss'Z'")
 
     fun parse(xmlData: String): Boolean {
         var status = true
@@ -37,7 +44,12 @@ class ParseItems {
                                     currentRecord = TrackingPoint()
                                 }
                                 "ele" -> currentRecord.ele = textValue.toDouble()
-                                "time" -> currentRecord.trackingPointtime = textValue
+                                "time" -> {
+                                    val time = dateFormat.parse(textValue)
+                                    Log.i(TAG, time.toString())
+                                    currentRecord.trackingPointtime = textValue
+
+                                }
                             }
                         }
                     }

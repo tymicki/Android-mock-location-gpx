@@ -113,7 +113,6 @@ class MainActivity : AppCompatActivity() {
     private fun isMockSettingsON(): Boolean {
         var isMockLocation = false
         isMockLocation = try {
-            //if marshmallow
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 val opsManager = this.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
                 opsManager.checkOp(AppOpsManager.OPSTR_MOCK_LOCATION,
