@@ -70,8 +70,7 @@ class MainActivity : AppCompatActivity() {
             if (isExternalStorageReadable()) {
                 Log.i(TAG, "externals storage is readable")
                 val downloadsPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath;
-                val dataFile = """${downloadsPath}/${MOCK_TRACK_DATA_FILENAME}"""
-                val file = File(dataFile)
+                val file = File("""${downloadsPath}/${MOCK_TRACK_DATA_FILENAME}""")
                 if (file?.exists()) {
                     Log.i(TAG, "data file exists")
                 } else {
