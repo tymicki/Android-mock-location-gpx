@@ -6,9 +6,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
 import android.provider.Settings
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityCompat.checkSelfPermission
@@ -27,7 +29,9 @@ class MainActivity : AppCompatActivity() {
         const val TAG = "MainActivity"
         const val MOCK_TRACK_DATA_FILENAME = "mock_track.gpx"
         const val PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 1
+        val handler = Handler()
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,7 +85,15 @@ class MainActivity : AppCompatActivity() {
                     Log.i(TAG, "lon= ${item.lon}")
                     Log.i(TAG, "ele= ${item.ele}")
                     Log.i(TAG, "pointDelay=${item.pointDelay}")
+                    handler.postDelayed({
+                        val mockGPS = MockLocationProvider(LocationManager.GPS_PROVIDER, this)
+                        val mockWifi = MockLocationProvider(LocationManager.NETWORK_PROVIDER, this)
+                        Log.i(TAG, "pushing mock location")
+                        mockGPS.pushLocation(item.lat, item.lon, item.ele, 0f)
+                        mockWifi.pushLocation(item.lat, item.lon, item.ele, 0f)
+                    }, item.pointDelay)
                 }
+
             } else {
                 Log.i(TAG, "data file doesn't exist")
             }
