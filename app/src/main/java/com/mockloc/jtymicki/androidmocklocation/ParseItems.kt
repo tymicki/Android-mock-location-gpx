@@ -11,7 +11,9 @@ class ParseItems {
     }
 
     val items = ArrayList<TrackingPoint>()
-    var dateFormat = SimpleDateFormat("yyyy-mm-dd'T'hh:mm:ss'Z'")
+    val dateFormat = SimpleDateFormat("yyyy-mm-dd'T'hh:mm:ss'Z'")
+    var previousTimeStamp: Long = 0
+
 
     fun parse(xmlData: String): Boolean {
         var status = true
@@ -47,8 +49,13 @@ class ParseItems {
                                 "time" -> {
                                     val time = dateFormat.parse(textValue)
                                     Log.i(TAG, time.toString())
-                                    currentRecord.trackingPointTime = textValue
-
+                                    if (items.size == 0) {
+                                        currentRecord.pointDelay = 0
+                                        previousTimeStamp = time.time
+                                    } else {
+                                        currentRecord.pointDelay = time.time - previousTimeStamp
+                                        previousTimeStamp = time.time
+                                    }
                                 }
                             }
                         }

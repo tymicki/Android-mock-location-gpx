@@ -20,7 +20,7 @@ import java.io.BufferedReader
 import java.io.File
 
 data class TrackingPoint(var lat: Double = 0.0, var lon: Double = 0.0, var ele: Double = 0.0,
-                         var trackingPointTime: String = "")
+                         var pointDelay: Long = 0)
 
 class MainActivity : AppCompatActivity() {
     companion object {
@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity() {
                     Log.i(TAG, "lat= ${item.lat}")
                     Log.i(TAG, "lon= ${item.lon}")
                     Log.i(TAG, "ele= ${item.ele}")
-                    Log.i(TAG, "time= ${item.trackingPointTime}")
+                    Log.i(TAG, "pointDelay=${item.pointDelay}")
                 }
             } else {
                 Log.i(TAG, "data file doesn't exist")
