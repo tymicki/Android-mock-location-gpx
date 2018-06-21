@@ -8,38 +8,18 @@
     tools:layout_editor_absoluteY="81dp">
 
     <Button
-        android:id="@+id/startOnceButton"
+        android:id="@+id/runGPXMockLocations"
         android:layout_width="@dimen/button_width"
-        android:layout_height="wrap_content"
+        android:layout_height="38dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="@string/one_run_button_text"
+        android:text="@string/run_gpx_mock_locations_button_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/enableMockLocation" />
-
-    <Button
-        android:id="@+id/startContinuousButton"
-        android:layout_width="@dimen/button_width"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/run_continuous_button_text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/startOnceButton" />
-
-    <Button
-        android:id="@+id/stopTestButton"
-        android:layout_width="@dimen/button_width"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/stop_test_button_text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/startContinuousButton" />
+        app:layout_constraintTop_toBottomOf="@+id/gpxFileNameLabel" />
 
     <TextView
         android:id="@+id/mockLocationPermission"
@@ -63,5 +43,27 @@
         android:visibility="visible"
         app:layout_constraintBaseline_toBaselineOf="@+id/mockLocationPermission"
         app:layout_constraintStart_toEndOf="@+id/mockLocationPermission" />
+
+    <TextView
+        android:id="@+id/gpxFileLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/gpx_file_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/enableMockLocation" />
+
+    <TextView
+        android:id="@+id/gpxFileNameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/gpx_file_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gpxFileLabel" />
 
 </android.support.constraint.ConstraintLayout>

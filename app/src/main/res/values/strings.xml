@@ -2,7 +2,7 @@
     <string name="app_name">Android mock location</string>
     <string name="action_settings">Settings</string>
     <string name="manage_mock_testing_banner">Manage mock location testing</string>
-    <string name="one_run_button_text">Run once</string>
+    <string name="run_gpx_mock_locations_button_text">run gpx mock locations</string>
     <string name="location_test_finish">Test run finished</string>
     <string name="app_status_label">App status:</string>
     <string name="connection_status_label">Connection status:</string>
@@ -21,7 +21,6 @@
     <string name="elapsed_time">%1$,d seconds since boot</string>
     <string name="clock_time">yyyy_MM_dd kk:mm UTCZ</string>
     <string name="accuracy">%1$.2f</string>
-    <string name="stop_test_button_text">Stop test</string>
     <string name="pause_entry_label">Pause before test (secs): </string>
     <string name="send_entry_label">Send interval (secs):</string>
     <string name="pause_interval_empty">No value supplied for pause interval</string>
@@ -31,8 +30,6 @@
     <string name="not_continuous_test">Stop test invalid; not in continuous test</string>
     <string name="notification_title_test_start">Mock Location Testing</string>
     <string name="notification_content_test_start">Starting test</string>
-    <string name="notification_content_test_running">Test running</string>
-    <string name="notification_content_test_stop">Test stopped</string>
     <string name="invalid_broadcast_code">Received invalid broadcast code.</string>
     <string name="test_interrupted">Continuous testing interrupted by user.</string>
     <string name="no_service">The test service is not running</string>
@@ -41,5 +38,7 @@
     <string name="mock_location_granted">Mock location permission is granted</string>
     <string name="mock_location_not_granted">mock location not granted</string>
     <string name="enable_mock_location">set mock location app</string>
+    <string name="gpx_file_label">Mock location data must be put into:</string>
+    <string name="gpx_file_name">/sdcard/Download/mock_track.gpx</string>
 
 </resources>

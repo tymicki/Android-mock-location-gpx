@@ -45,17 +45,18 @@ class MainActivity : AppCompatActivity() {
         enableMockLocation.setOnClickListener {
             startActivity(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS))
         }
+        runGPXMockLocations.setOnClickListener {
+            loadGPXMockLocations()
+        }
     }
 
 
     override fun onStart() {
         super.onStart()
         handleMockLocationAccess()
-
-        handleStorage()
     }
 
-    private fun handleStorage() {
+    private fun loadGPXMockLocations() {
         if (checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             Log.i(TAG, "READ_EXTERNAL_STORAGE granted ")
             readGPXData()
@@ -87,12 +88,12 @@ class MainActivity : AppCompatActivity() {
                 val parseGPX = ParseGPX()
                 parseGPX.parse(inputString)
                 for (item in parseGPX.items) {
-                    Log.i(TAG, "lat= ${item.lat}")
-                    Log.i(TAG, "lon= ${item.lon}")
-                    Log.i(TAG, "ele= ${item.ele}")
                     Log.i(TAG, "pointDelay=${item.pointDelay}")
                     handler.postDelayed({
                         Log.i(TAG, "pushing mock location")
+                        Log.i(TAG, "lat= ${item.lat}")
+                        Log.i(TAG, "lon= ${item.lon}")
+                        Log.i(TAG, "ele= ${item.ele}")
                         mockGPS?.pushLocation(item.lat, item.lon, item.ele, 0f)
                         mockWifi?.pushLocation(item.lat, item.lon, item.ele, 0f)
                     }, item.pointDelay)
