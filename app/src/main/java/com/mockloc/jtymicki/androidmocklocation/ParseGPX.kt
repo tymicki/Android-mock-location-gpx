@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat
 
 class ParseGPX {
     companion object {
-        const val TAG = "MainActivity"
+        const val TAG = "ParseGPX"
     }
 
     val items = ArrayList<TrackingPoint>()
@@ -64,6 +64,7 @@ class ParseGPX {
                 eventType = xpp.next()
             }
         } catch (e: Exception) {
+            Log.i(TAG, e.toString())
             status = false
         }
         return status
