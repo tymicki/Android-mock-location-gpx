@@ -5,7 +5,7 @@ import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.text.SimpleDateFormat
 
-class ParseItems {
+class ParseGPX {
     companion object {
         const val TAG = "MainActivity"
     }

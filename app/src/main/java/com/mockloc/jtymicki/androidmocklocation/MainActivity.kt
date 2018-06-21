@@ -84,9 +84,9 @@ class MainActivity : AppCompatActivity() {
                 val bufferedReader: BufferedReader = file.bufferedReader()
                 val inputString = bufferedReader.use { it.readText() }
                 Log.i(TAG, inputString)
-                val parseItems = ParseItems()
-                parseItems.parse(inputString)
-                for (item in parseItems.items) {
+                val parseGPX = ParseGPX()
+                parseGPX.parse(inputString)
+                for (item in parseGPX.items) {
                     Log.i(TAG, "lat= ${item.lat}")
                     Log.i(TAG, "lon= ${item.lon}")
                     Log.i(TAG, "ele= ${item.ele}")
