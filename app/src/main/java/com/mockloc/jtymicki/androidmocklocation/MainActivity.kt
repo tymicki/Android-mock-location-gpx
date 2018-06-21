@@ -30,12 +30,18 @@ class MainActivity : AppCompatActivity() {
         const val MOCK_TRACK_DATA_FILENAME = "mock_track.gpx"
         const val PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 1
         val handler = Handler()
+
     }
+
+    private var mockGPS: MockLocationProvider? = null
+    private var mockWifi: MockLocationProvider? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        mockGPS = MockLocationProvider(LocationManager.GPS_PROVIDER, this)
+        mockWifi = MockLocationProvider(LocationManager.NETWORK_PROVIDER, this)
         enableMockLocation.setOnClickListener {
             startActivity(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS))
         }
@@ -86,14 +92,11 @@ class MainActivity : AppCompatActivity() {
                     Log.i(TAG, "ele= ${item.ele}")
                     Log.i(TAG, "pointDelay=${item.pointDelay}")
                     handler.postDelayed({
-                        val mockGPS = MockLocationProvider(LocationManager.GPS_PROVIDER, this)
-                        val mockWifi = MockLocationProvider(LocationManager.NETWORK_PROVIDER, this)
                         Log.i(TAG, "pushing mock location")
-                        mockGPS.pushLocation(item.lat, item.lon, item.ele, 0f)
-                        mockWifi.pushLocation(item.lat, item.lon, item.ele, 0f)
+                        mockGPS?.pushLocation(item.lat, item.lon, item.ele, 0f)
+                        mockWifi?.pushLocation(item.lat, item.lon, item.ele, 0f)
                     }, item.pointDelay)
                 }
-
             } else {
                 Log.i(TAG, "data file doesn't exist")
             }
