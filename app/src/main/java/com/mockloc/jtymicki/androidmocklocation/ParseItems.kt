@@ -47,7 +47,7 @@ class ParseItems {
                                 "time" -> {
                                     val time = dateFormat.parse(textValue)
                                     Log.i(TAG, time.toString())
-                                    currentRecord.trackingPointtime = textValue
+                                    currentRecord.trackingPointTime = textValue
 
                                 }
                             }

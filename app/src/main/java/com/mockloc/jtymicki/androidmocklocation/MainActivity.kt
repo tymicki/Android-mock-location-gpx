@@ -19,13 +19,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.io.BufferedReader
 import java.io.File
 
-
-class TrackingPoint {
-    var lat = 0.0
-    var lon = 0.0
-    var ele = 0.0
-    var trackingPointtime = ""
-}
+data class TrackingPoint(var lat: Double = 0.0, var lon: Double = 0.0, var ele: Double = 0.0,
+                         var trackingPointTime: String = "")
 
 class MainActivity : AppCompatActivity() {
     companion object {
@@ -85,7 +80,7 @@ class MainActivity : AppCompatActivity() {
                     Log.i(TAG, "lat= ${item.lat}")
                     Log.i(TAG, "lon= ${item.lon}")
                     Log.i(TAG, "ele= ${item.ele}")
-                    Log.i(TAG, "time= ${item.trackingPointtime}")
+                    Log.i(TAG, "time= ${item.trackingPointTime}")
                 }
             } else {
                 Log.i(TAG, "data file doesn't exist")
