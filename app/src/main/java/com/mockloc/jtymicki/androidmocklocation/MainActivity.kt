@@ -29,19 +29,11 @@ class MainActivity : AppCompatActivity() {
         const val TAG = "MainActivity"
         const val MOCK_TRACK_DATA_FILENAME = "mock_track.gpx"
         const val PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 1
-        val handler = Handler()
-
     }
-
-    private var mockGPS: MockLocationProvider? = null
-    private var mockWifi: MockLocationProvider? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        mockGPS = MockLocationProvider(LocationManager.GPS_PROVIDER, this)
-        mockWifi = MockLocationProvider(LocationManager.NETWORK_PROVIDER, this)
         enableMockLocation.setOnClickListener {
             startActivity(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS))
         }
@@ -59,54 +51,10 @@ class MainActivity : AppCompatActivity() {
     private fun loadGPXMockLocations() {
         if (checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             Log.i(TAG, "READ_EXTERNAL_STORAGE granted ")
-            readGPXData()
+            MockRoute().pushMockRoute(this)
         } else {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), PERMISSION_REQUEST_READ_EXTERNAL_STORAGE)
         }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == PERMISSION_REQUEST_READ_EXTERNAL_STORAGE &&
-                permissions[0] == Manifest.permission.READ_EXTERNAL_STORAGE &&
-                grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            readGPXData()
-        }
-    }
-
-    private fun readGPXData() {
-        if (isExternalStorageReadable()) {
-            Log.i(TAG, "externals storage is readable")
-            val downloadsPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath;
-            val file = File("""${downloadsPath}/${MOCK_TRACK_DATA_FILENAME}""")
-            if (file?.exists()) {
-                Log.i(TAG, "data file exists")
-
-                val bufferedReader: BufferedReader = file.bufferedReader()
-                val inputString = bufferedReader.use { it.readText() }
-                Log.i(TAG, inputString)
-                val parseGPX = ParseGPX()
-                parseGPX.parse(inputString)
-                for (item in parseGPX.items) {
-                    Log.i(TAG, "pointDelay=${item.pointDelay}")
-                    handler.postDelayed({
-                        Log.i(TAG, "pushing mock location")
-                        Log.i(TAG, "lat= ${item.lat}")
-                        Log.i(TAG, "lon= ${item.lon}")
-                        Log.i(TAG, "ele= ${item.ele}")
-                        mockGPS?.pushLocation(item.lat, item.lon, item.ele, 0f)
-                        mockWifi?.pushLocation(item.lat, item.lon, item.ele, 0f)
-                    }, item.pointDelay)
-                }
-            } else {
-                Log.i(TAG, "data file doesn't exist")
-            }
-        }
-    }
-
-    private fun isExternalStorageReadable(): Boolean {
-        return Environment.getExternalStorageState() in
-                setOf(Environment.MEDIA_MOUNTED, Environment.MEDIA_MOUNTED_READ_ONLY)
     }
 
     private fun handleMockLocationAccess() {
