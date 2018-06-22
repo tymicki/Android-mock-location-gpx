@@ -22,7 +22,6 @@ data class TrackingPoint(var lat: Double = 0.0, var lon: Double = 0.0, var ele: 
 class MainActivity : AppCompatActivity() {
     companion object {
         const val TAG = "MainActivity"
-        const val MOCK_TRACK_DATA_FILENAME = "mock_track.gpx"
         const val PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 1
     }
 

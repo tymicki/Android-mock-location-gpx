@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Android mock location</string>
-    <string name="run_gpx_mock_locations_button_text">run gpx mock locations</string>
+    <string name="run_gpx_mock_locations_button_text">run mock route</string>
     <string name="mock_location_granted">Mock location permission is granted</string>
-    <string name="mock_location_not_granted">mock location not granted</string>
+    <string name="mock_location_not_granted">Mock location not granted</string>
     <string name="enable_mock_location">set mock location app</string>
     <string name="gpx_file_label">Mock location data must be put into:</string>
     <string name="gpx_file_name">/sdcard/Download/mock_track.gpx</string>

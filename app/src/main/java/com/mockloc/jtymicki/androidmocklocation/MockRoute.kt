@@ -9,34 +9,38 @@ import java.io.BufferedReader
 import java.io.File
 
 class MockRoute {
+    companion object {
+        const val TAG = "MockRoute"
+        const val MOCK_TRACK_DATA_FILENAME = "mock_track.gpx"
+    }
     fun pushMockRoute(context: Context) {
         if (isExternalStorageReadable()) {
-            Log.i(MainActivity.TAG, "externals storage is readable")
+            Log.i(TAG, "externals storage is readable")
             val downloadsPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath;
-            val file = File("""${downloadsPath}/${MainActivity.MOCK_TRACK_DATA_FILENAME}""")
+            val file = File("""${downloadsPath}/${MOCK_TRACK_DATA_FILENAME}""")
             if (file?.exists()) {
-                Log.i(MainActivity.TAG, "data file exists")
+                Log.i(TAG, "data file exists")
                 val bufferedReader: BufferedReader = file.bufferedReader()
                 val inputString = bufferedReader.use { it.readText() }
-                Log.i(MainActivity.TAG, inputString)
+                Log.i(TAG, inputString)
                 val parseGPX = ParseGPX()
                 parseGPX.parse(inputString)
                 val mockGPS = MockLocationProvider(LocationManager.GPS_PROVIDER, context)
                 val mockWifi = MockLocationProvider(LocationManager.NETWORK_PROVIDER, context)
                 val handler = Handler()
                 for (item in parseGPX.items) {
-                    Log.i(MainActivity.TAG, "pointDelay=${item.pointDelay}")
+                    Log.i(TAG, "pointDelay=${item.pointDelay}")
                     handler.postDelayed({
-                        Log.i(MainActivity.TAG, "pushing mock location")
-                        Log.i(MainActivity.TAG, "lat= ${item.lat}")
-                        Log.i(MainActivity.TAG, "lon= ${item.lon}")
-                        Log.i(MainActivity.TAG, "ele= ${item.ele}")
+                        Log.i(TAG, "pushing mock location")
+                        Log.i(TAG, "lat= ${item.lat}")
+                        Log.i(TAG, "lon= ${item.lon}")
+                        Log.i(TAG, "ele= ${item.ele}")
                         mockGPS?.pushLocation(item.lat, item.lon, item.ele, 0f)
                         mockWifi?.pushLocation(item.lat, item.lon, item.ele, 0f)
                     }, item.pointDelay)
                 }
             } else {
-                Log.i(MainActivity.TAG, "data file doesn't exist")
+                Log.i(TAG, "data file doesn't exist")
             }
         }
     }
