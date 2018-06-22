@@ -15,6 +15,6 @@ Should be put on device under test here:
 /sdcard/Download/mock_track.gpx
 App should be also granted read external storage permission in this use case.
 Mock route could be started from the app UI by tapping on "RUN GPX MOCK"
- or adb by sending below action from the commandline:
+ or by sending below action from the commandline:
 adb  shell am broadcast -a send.mock.route 
 
