@@ -40,7 +40,7 @@
     <string name="enable_mock_location">set mock location app</string>
     <string name="gpx_file_label">Mock location data must be put into:</string>
     <string name="gpx_file_name">/sdcard/Download/mock_track.gpx</string>
-    <string name="read_external_storage_permission_not_granted">read external storage permission not granted</string>
-    <string name="read_external_storage_permission_granted">read external storage permission is granted</string>
+    <string name="read_external_storage_permission_not_granted">Read external storage permission not granted</string>
+    <string name="read_external_storage_permission_granted">Read external storage permission is granted</string>
 
 </resources>
