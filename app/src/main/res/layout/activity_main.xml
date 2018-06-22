@@ -27,12 +27,11 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:text="@string/mock_location_not_granted"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:layout_editor_absoluteY="8dp" />
 
     <Button
         android:id="@+id/enableMockLocation"
@@ -48,12 +47,12 @@
         android:id="@+id/gpxFileLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="@string/gpx_file_label"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/enableMockLocation" />
+        app:layout_constraintTop_toBottomOf="@+id/readExternalStoragePermissionStatus" />
 
     <TextView
         android:id="@+id/gpxFileNameLabel"
@@ -65,5 +64,18 @@
         android:text="@string/gpx_file_name"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gpxFileLabel" />
+
+    <TextView
+        android:id="@+id/readExternalStoragePermissionStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="51dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/read_external_storage_permission_not_granted"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mockLocationPermission" />
 
 </android.support.constraint.ConstraintLayout>

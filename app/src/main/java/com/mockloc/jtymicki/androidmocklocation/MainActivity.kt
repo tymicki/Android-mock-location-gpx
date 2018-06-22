@@ -6,11 +6,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
-import android.os.Handler
 import android.provider.Settings
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityCompat.checkSelfPermission
@@ -18,8 +15,6 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
-import java.io.BufferedReader
-import java.io.File
 
 data class TrackingPoint(var lat: Double = 0.0, var lon: Double = 0.0, var ele: Double = 0.0,
                          var pointDelay: Long = 0)
@@ -45,7 +40,26 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        if (checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            Log.i(TAG, "READ_EXTERNAL_STORAGE granted ")
+            readExternalStoragePermissionStatus.setText(R.string.read_external_storage_permission_granted)
+            readExternalStoragePermissionStatus.setTextColor(Color.GREEN)
+        } else {
+            readExternalStoragePermissionStatus.setText(R.string.read_external_storage_permission_not_granted)
+            readExternalStoragePermissionStatus.setTextColor(Color.RED)
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), PERMISSION_REQUEST_READ_EXTERNAL_STORAGE)
+        }
         handleMockLocationAccess()
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSION_REQUEST_READ_EXTERNAL_STORAGE &&
+                permissions[0] == Manifest.permission.READ_EXTERNAL_STORAGE &&
+                grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            readExternalStoragePermissionStatus.setText(R.string.read_external_storage_permission_granted)
+            readExternalStoragePermissionStatus.setTextColor(Color.GREEN)
+        }
     }
 
     private fun loadGPXMockLocations() {
