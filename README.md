@@ -10,11 +10,10 @@ https://www.gpsies.com
 Testing file needs to be in format of 
 https://www.gpsies.com/GPX/1/0
 Example testing file can be found here
-https://github.com/tymicki/Android-mock-location-gpx/blob/master/mock_track.gpx
-Should be put on device under test here:
+https://github.com/tymicki/Android-mock-location-gpx/blob/master/mock_track.gpx should be put on device under test here:
 /sdcard/Download/mock_track.gpx
 App should be also granted read external storage permission in this use case.
-Mock route could be started from the app UI by tapping on "RUN GPX MOCK"
+Mock route could be started from the app UI by tapping on "RUN MOCK ROUTE"
  or by sending below action from the commandline:
 adb  shell am broadcast -a send.mock.route 
 
