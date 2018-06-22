@@ -20,7 +20,7 @@ class MockGPSReceiver : BroadcastReceiver() {
             if (mockWifi != null) {
                 mockWifi.shutdown()
             }
-        } else {
+        } else if (intent.getAction() == "send.mock") {
             mockGPS = MockLocationProvider(LocationManager.GPS_PROVIDER, context)
             mockWifi = MockLocationProvider(LocationManager.NETWORK_PROVIDER, context)
             val lat: Double
@@ -34,6 +34,8 @@ class MockGPSReceiver : BroadcastReceiver() {
             Log.i(TAG, String.format("setting mock to Latitude=%f, Longitude=%f Altitude=%f Accuracy=%f", lat, lon, alt, accuracy))
             mockGPS.pushLocation(lat, lon, alt, accuracy)
             mockWifi.pushLocation(lat, lon, alt, accuracy)
+        } else if (intent.getAction() == "send.mock.route") {
+            MockRoute().pushMockRoute(context)
         }
     }
 }

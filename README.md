@@ -13,5 +13,6 @@ Example testing file can be found here
 https://github.com/tymicki/Android-mock-location-gpx/blob/master/mock_track.gpx
 Should be put on device under test here:
 /sdcard/Download/mock_track.gpx
-
+Mock route could be form the app UI by tapping or adb by sending below action:
+adb  shell am broadcast -a send.mock.route 
 

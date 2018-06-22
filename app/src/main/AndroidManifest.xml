@@ -26,6 +26,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="send.mock" />
+                <action android:name="send.mock.route" />
                 <action android:name="stop.mock" />
             </intent-filter>
         </receiver>
