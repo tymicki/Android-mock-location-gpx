@@ -1,4 +1,4 @@
-# Android-mock-location-gpx
+# Android mock location gpx
 After installation set this app to be Mock location app.
 App has functionality of mocking either one location and mocking routes
 Example usage with mocking of one location from commandline (with use of Android Debug Bridge ):
