@@ -1,7 +1,7 @@
 # Android mock location gpx
 Application for easy locations mocking  
 ## Getting Started
-After installation set this app device developer options to be mock location app.
+After installation set this app in device developer options to be mock location app.
 Application has functionality of mocking either one location or mocking routes. Example usage with mocking of one location from commandline (with use of Android Debug Bridge )
 ```
 adb  shell am broadcast -a send.mock -e lat 52.169 -e lon 21.068
