@@ -6,8 +6,8 @@ Application has functionality of mocking either one location or mocking routes. 
 ```
 adb shell am broadcast -a send.mock -e lat 52.169 -e lon 21.068
 ```
-App has also option for mocking location track with use of GPX created by [GPSies](https://www.gpsies.com)
-GPX file needs to comply with
+App has also option for mocking location track with use of GPX created by [GPSies](https://www.gpsies.com).
+Mock location track data needs to comply with
 ```
 https://www.gpsies.com/GPX/1/0
 ```
