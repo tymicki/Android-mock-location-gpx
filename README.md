@@ -12,7 +12,7 @@ Mock location track data needs to comply with
 https://www.gpsies.com/GPX/1/0
 ```
 Example testing file can be found here
-[mock track](https://github.com/tymicki/Android-mock-location-gpx/blob/master/mock_track.gpx), should be put on the device under test here:
+[mock track](https://raw.githubusercontent.com/tymicki/Android-mock-location-gpx/master/mock_track.gpx), should be put on the device under test here:
 ```
 /sdcard/Download/mock_track.gpx
 ```
