@@ -6,8 +6,9 @@ import android.content.Intent
 import android.location.LocationManager
 import android.util.Log
 
+private const val TAG = "MockGPSReceiver"
+
 class MockGPSReceiver : BroadcastReceiver() {
-    private val TAG = "MockGPSReceiver"
 
     override fun onReceive(context: Context, intent: Intent) {
         Log.i(TAG, "on receive invoked")

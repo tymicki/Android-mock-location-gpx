@@ -5,13 +5,11 @@ import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.text.SimpleDateFormat
 
-class ParseGPX {
-    companion object {
-        const val TAG = "ParseGPX"
-    }
+private const val TAG = "ParseGPX"
 
+class ParseGPX {
     val items = ArrayList<TrackingPoint>()
-    val dateFormat = SimpleDateFormat("yyyy-mm-dd'T'hh:mm:ss'Z'")
+    private val dateFormat = SimpleDateFormat("yyyy-mm-dd'T'hh:mm:ss'Z'")
     var firstPointTimeStamp: Long = 0
 
 

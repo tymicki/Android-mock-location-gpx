@@ -9,7 +9,6 @@ import android.os.SystemClock
 internal class MockLocationProvider(private val providerName: String, private val context: Context) {
 
     init {
-
         val locationManager = context.getSystemService(
                 Context.LOCATION_SERVICE) as LocationManager
         locationManager.addTestProvider(providerName, false, false, false, false, false,

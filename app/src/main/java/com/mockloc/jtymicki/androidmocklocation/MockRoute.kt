@@ -8,11 +8,10 @@ import android.util.Log
 import java.io.BufferedReader
 import java.io.File
 
+private const val TAG = "MockRoute"
+private const val MOCK_TRACK_DATA_FILENAME = "mock_track.gpx"
+
 class MockRoute {
-    companion object {
-        const val TAG = "MockRoute"
-        const val MOCK_TRACK_DATA_FILENAME = "mock_track.gpx"
-    }
     fun pushMockRoute(context: Context) {
         if (isExternalStorageReadable()) {
             Log.i(TAG, "externals storage is readable")

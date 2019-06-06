@@ -19,11 +19,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 data class TrackingPoint(var lat: Double = 0.0, var lon: Double = 0.0, var ele: Double = 0.0,
                          var pointDelay: Long = 0)
 
+private const val TAG = "MainActivity"
+private const val PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 1
+
 class MainActivity : AppCompatActivity() {
-    companion object {
-        const val TAG = "MainActivity"
-        const val PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 1
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
