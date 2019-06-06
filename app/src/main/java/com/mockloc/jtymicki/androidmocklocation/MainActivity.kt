@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == PERMISSION_REQUEST_READ_EXTERNAL_STORAGE &&
+        if (permissions.isNotEmpty() && requestCode == PERMISSION_REQUEST_READ_EXTERNAL_STORAGE &&
                 permissions[0] == Manifest.permission.READ_EXTERNAL_STORAGE &&
                 grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             readExternalStoragePermissionStatus.setText(R.string.read_external_storage_permission_granted)
