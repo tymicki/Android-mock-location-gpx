@@ -1,10 +1,12 @@
 package com.mockloc.jtymicki.androidmocklocation
 
+import android.R
 import android.content.Context
 import android.location.LocationManager
 import android.os.Environment
 import android.os.Handler
 import android.util.Log
+import android.widget.Toast
 import java.io.BufferedReader
 import java.io.File
 
@@ -39,7 +41,8 @@ class MockRoute {
                     }, item.pointDelay)
                 }
             } else {
-                Log.i(TAG, "data file doesn't exist")
+                Log.i(TAG, "data file doesn't exist ${file.absolutePath}")
+                Toast.makeText(context, "data file doesn't exist", Toast.LENGTH_LONG).show()
             }
         }
     }
