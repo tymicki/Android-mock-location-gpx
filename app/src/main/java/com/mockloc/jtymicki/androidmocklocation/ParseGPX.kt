@@ -9,7 +9,7 @@ private const val TAG = "ParseGPX"
 
 class ParseGPX {
     val items = ArrayList<TrackingPoint>()
-    private val dateFormat = SimpleDateFormat("yyyy-mm-dd'T'hh:mm:ss'Z'")
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     var firstPointTimeStamp: Long = 0
 
 
@@ -60,7 +60,8 @@ class ParseGPX {
                 }
                 eventType = xpp.next()
             }
-        } catch (e: Exception) {
+        }
+        catch (e: Exception) {
             Log.i(TAG, e.toString())
             status = false
         }
