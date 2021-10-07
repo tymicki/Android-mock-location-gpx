@@ -1,6 +1,8 @@
 package com.mockloc.jtymicki.androidmocklocation
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.AppOpsManager
 import android.content.Context
 import android.content.Intent
@@ -9,18 +11,25 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.support.v4.app.ActivityCompat
-import android.support.v4.app.ActivityCompat.checkSelfPermission
-import android.support.v7.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityCompat.checkSelfPermission
+import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.View
+import android.net.Uri
+import android.provider.DocumentsContract
+import com.google.android.gms.location.LocationServices
 import kotlinx.android.synthetic.main.activity_main.*
 
-data class TrackingPoint(var lat: Double = 0.0, var lon: Double = 0.0, var ele: Double = 0.0,
+data class TrackingPoint(var lat: Double = 0.0, var lon: Double = 0.0, var altitude: Double = 0.0,
                          var pointDelay: Long = 0)
 
 private const val TAG = "MainActivity"
 private const val PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 1
+private const val PERMISSION_REQUEST_ACCESS_FINE_LOCATION = 2
+private const val PERMISSION_REQUEST_ACCESS_COARSE_LOCATION = 3
+private const val pickerInitialUri = "content://com.android.externalstorage.documents/document/primary%3AMocks"
+private const val OPEN_DOCUMENT_REQUEST_CODE = 10
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,40 +42,100 @@ class MainActivity : AppCompatActivity() {
         runGPXMockLocations.setOnClickListener {
             loadGPXMockLocations()
         }
+        clearGPXMockLocations.setOnClickListener {
+            clearGPXMockLocations()
+        }
+        clearGPXMockLocations.visibility = View.GONE
     }
 
 
     override fun onStart() {
         super.onStart()
-        if (checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            Log.i(TAG, "READ_EXTERNAL_STORAGE granted ")
-            readExternalStoragePermissionStatus.setText(R.string.read_external_storage_permission_granted)
-            readExternalStoragePermissionStatus.setTextColor(Color.GREEN)
-        } else {
-            readExternalStoragePermissionStatus.setText(R.string.read_external_storage_permission_not_granted)
-            readExternalStoragePermissionStatus.setTextColor(Color.RED)
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), PERMISSION_REQUEST_READ_EXTERNAL_STORAGE)
-        }
+        onStartOrResume()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        onStartOrResume()
+    }
+
+    private fun onStartOrResume() {
+        checkReadExternalStoragePermission(true)
+        checkCoarseLocationPermission(true)
+        checkFineLocationPermission(true)
         handleMockLocationAccess()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (permissions.isNotEmpty() && requestCode == PERMISSION_REQUEST_READ_EXTERNAL_STORAGE &&
-                permissions[0] == Manifest.permission.READ_EXTERNAL_STORAGE &&
-                grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        checkReadExternalStoragePermission()
+        checkCoarseLocationPermission()
+        checkFineLocationPermission()
+    }
+
+    private fun checkReadExternalStoragePermission(requestIfNotGranted: Boolean = false): Boolean {
+        var granted = false
+        if (checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            Log.i(TAG, "READ_EXTERNAL_STORAGE granted ")
             readExternalStoragePermissionStatus.setText(R.string.read_external_storage_permission_granted)
             readExternalStoragePermissionStatus.setTextColor(Color.GREEN)
+            granted = true
+        } else {
+            readExternalStoragePermissionStatus.setText(R.string.read_external_storage_permission_not_granted)
+            readExternalStoragePermissionStatus.setTextColor(Color.RED)
+            if(requestIfNotGranted) ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), PERMISSION_REQUEST_READ_EXTERNAL_STORAGE)
+            granted = false
         }
+        return granted
+    }
+
+    private fun checkCoarseLocationPermission(requestIfNotGranted: Boolean = false): Boolean {
+        var granted = false
+        if (checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            Log.i(TAG, "ACCESS_COARSE_LOCATION granted ")
+            accessCoarseLocationPermissionStatus.setText(R.string.access_coarse_location_permission_granted)
+            accessCoarseLocationPermissionStatus.setTextColor(Color.GREEN)
+            granted = true
+        } else {
+            accessCoarseLocationPermissionStatus.setText(R.string.access_coarse_location_permission_not_granted)
+            accessCoarseLocationPermissionStatus.setTextColor(Color.RED)
+            if(requestIfNotGranted) ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), PERMISSION_REQUEST_ACCESS_COARSE_LOCATION)
+            granted = false
+        }
+        return granted
+    }
+
+    private fun checkFineLocationPermission(requestIfNotGranted: Boolean = false): Boolean {
+        var granted = false
+        if (checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            Log.i(TAG, "ACCESS_COARSE_LOCATION granted ")
+            accessFineLocationPermissionStatus.setText(R.string.access_fine_location_permission_granted)
+            accessFineLocationPermissionStatus.setTextColor(Color.GREEN)
+            granted = true
+        } else {
+            accessFineLocationPermissionStatus.setText(R.string.access_fine_location_permission_not_granted)
+            accessFineLocationPermissionStatus.setTextColor(Color.RED)
+            if(requestIfNotGranted) ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_REQUEST_ACCESS_COARSE_LOCATION)
+            granted = false
+        }
+        return granted
     }
 
     private fun loadGPXMockLocations() {
-        if (checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            Log.i(TAG, "READ_EXTERNAL_STORAGE granted ")
-            MockRoute().pushMockRoute(this)
-        } else {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), PERMISSION_REQUEST_READ_EXTERNAL_STORAGE)
+        if(checkReadExternalStoragePermission() && checkCoarseLocationPermission() && checkFineLocationPermission()){
+            openDocumentPicker()
         }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun clearGPXMockLocations() {
+        val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+        if(MockRoute.Companion.hasLocationPermission(this)){
+            fusedLocationProviderClient.setMockMode(false)
+            fusedLocationProviderClient.flushLocations()
+        }
+        runGPXMockLocations.visibility = View.VISIBLE
+        clearGPXMockLocations.visibility = View.GONE
     }
 
     private fun handleMockLocationAccess() {
@@ -98,5 +167,43 @@ class MainActivity : AppCompatActivity() {
         }
         return isMockLocation
 
+    }
+
+    private fun openDocumentPicker() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            // Optionally, specify a URI for the file that should appear in the
+            // system file picker when it loads.
+            putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri)
+
+            /**
+             * Because we'll want to use [ContentResolver.openFileDescriptor] to read
+             * the data of whatever file is picked, we set [Intent.CATEGORY_OPENABLE]
+             * to ensure this will succeed.
+             */
+            addCategory(Intent.CATEGORY_OPENABLE)
+        }
+        intent.setType("*/*")
+        startActivityForResult(intent, OPEN_DOCUMENT_REQUEST_CODE)
+    }
+
+    private fun openDocument(documentUri: Uri) {
+        runGPXMockLocations.visibility = View.GONE
+        clearGPXMockLocations.visibility = View.VISIBLE
+        MockRoute().pushMockRoute(this, documentUri)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
+        super.onActivityResult(requestCode, resultCode, resultData)
+
+        if (requestCode == OPEN_DOCUMENT_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            resultData?.data?.also { documentUri ->
+                Log.d(TAG, "Loaded document: $documentUri");
+                contentResolver.takePersistableUriPermission(
+                    documentUri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
+                openDocument(documentUri)
+            }
+        }
     }
 }

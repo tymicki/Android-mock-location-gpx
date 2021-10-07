@@ -9,7 +9,7 @@ private const val TAG = "ParseGPX"
 
 class ParseGPX {
     val items = ArrayList<TrackingPoint>()
-    private val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
     var firstPointTimeStamp: Long = 0
 
 
@@ -43,7 +43,7 @@ class ParseGPX {
                                     inItem = false
                                     currentRecord = TrackingPoint()
                                 }
-                                "ele" -> currentRecord.ele = textValue.toDouble()
+                                "ele" -> currentRecord.altitude = textValue.toDouble()
                                 "time" -> {
                                     val time = dateFormat.parse(textValue)
                                     Log.i(TAG, time.toString())

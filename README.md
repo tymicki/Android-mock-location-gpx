@@ -1,24 +1,20 @@
 # Android mock location gpx
-Application for easy locations mocking  
+An application for easy mocking of locations via a GPX file.
+
 ## Getting Started
-After installation set this app in device developer options to be mock location app.
-Application has functionality of mocking either one location or mocking routes. Example usage with mocking of one location via adb (with use of Android Debug Bridge)
+After installation set this app in device developer options to be the mock location app.
+
+The app mocks locations via a track file in [GPX format](https://wiki.openstreetmap.org/wiki/GPX).
+Each `<trkpt>` must have `lat` and `lon` attributes and a `<time>` element with the value in format `yyyy-MM-ddTHH:mm:ssZ`,
+and optionally `<ele>` elements for elevation.
+
+An example GPX track file can be found here: [`mock_track.gpx`](/mock_track.gpx)
+
+GPX track files must be put on the device here:
 ```
-adb shell am broadcast -a send.mock -e lat 52.169 -e lon 21.068
+/sdcard/Mocks/
 ```
-App has also option for mocking location track with use of GPX created by [GPSies](https://www.gpsies.com).
-Mock location track data needs to comply with
-```
-https://www.gpsies.com/GPX/1/0
-```
-Example testing file can be found here
-[mock track](https://raw.githubusercontent.com/tymicki/Android-mock-location-gpx/master/mock_track.gpx), should be put on the device under test here:
-```
-/sdcard/Download/mock_track.gpx
-```
-App should be also granted read external storage permission in this use case.
-Mock route could be started from the app UI by tapping on "RUN MOCK ROUTE"
- or by sending below action from adb:
-```
-adb shell am broadcast -a send.mock.route 
-```
+
+The app should be granted read external storage and location permissions.
+Mock route can be started from the app UI by tapping on "RUN MOCK ROUTE" and chosing the GPX file via the File Picker UI.
+Location mocking can be stopped by tapping "CLEAR MOCK ROUTE".
