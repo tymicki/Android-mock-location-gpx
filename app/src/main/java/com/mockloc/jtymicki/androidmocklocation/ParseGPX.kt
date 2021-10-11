@@ -9,7 +9,7 @@ private const val TAG = "ParseGPX"
 
 class ParseGPX {
     val items = ArrayList<TrackingPoint>()
-    private val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     var firstPointTimeStamp: Long = 0
 
 
