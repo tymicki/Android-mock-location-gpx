@@ -44,6 +44,7 @@ class ParseGPX {
                                     currentRecord = TrackingPoint()
                                 }
                                 "ele" -> currentRecord.altitude = textValue.toDouble()
+                                "accuracy" -> currentRecord.accuracy = textValue.toFloat()
                                 "time" -> {
                                     val time = dateFormat.parse(textValue)
                                     Log.i(TAG, time.toString())

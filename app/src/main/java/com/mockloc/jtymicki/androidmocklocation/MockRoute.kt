@@ -39,11 +39,12 @@ class MockRoute {
                     Log.i(TAG, "lat= ${item.lat}")
                     Log.i(TAG, "lon= ${item.lon}")
                     Log.i(TAG, "altitude= ${item.altitude}")
+                    Log.i(TAG, "altitude= ${item.accuracy}")
                     if (hasLocationPermission(context)) {
                         val location = Location("MockProvider")
                         location.latitude = item.lat
                         location.longitude = item.lon
-                        location.accuracy = 2.0f
+                        location.accuracy = item.accuracy
                         location.altitude = item.altitude
                         location.time = System.currentTimeMillis()
                         location.elapsedRealtimeNanos = SystemClock.elapsedRealtimeNanos()

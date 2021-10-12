@@ -21,7 +21,7 @@ import android.provider.DocumentsContract
 import com.google.android.gms.location.LocationServices
 import kotlinx.android.synthetic.main.activity_main.*
 
-data class TrackingPoint(var lat: Double = 0.0, var lon: Double = 0.0, var altitude: Double = 0.0,
+data class TrackingPoint(var lat: Double = 0.0, var lon: Double = 0.0, var altitude: Double = 0.0, var accuracy: Float = 0f,
                          var pointDelay: Long = 0)
 
 private const val TAG = "MainActivity"
