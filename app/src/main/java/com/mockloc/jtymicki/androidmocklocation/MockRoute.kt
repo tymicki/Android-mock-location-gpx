@@ -32,7 +32,7 @@ class MockRoute {
 
         val handler = Handler()
         for (item in parseGPX.items) {
-            Log.i(TAG, "pointDelay=${item.pointDelay}")
+//            Log.i(TAG, "pointDelay=${item.pointDelay}")
             handler.postDelayed({
                 try {
                     Log.i(TAG, "pushing mock location")
@@ -53,7 +53,7 @@ class MockRoute {
                     }
                 }catch (e : Exception){
                     if("provider is not a test provider".toRegex().containsMatchIn(e.localizedMessage)){
-                        Log.i(TAG, "NOT pushing mock location as mock providers not enabled")
+                        Log.w(TAG, "NOT pushing mock location as mock providers not enabled")
                         handler.removeCallbacksAndMessages(null)
                         if (hasLocationPermission(context)) {
                             fusedLocationProviderClient.setMockMode(false)

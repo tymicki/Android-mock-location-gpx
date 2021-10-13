@@ -47,7 +47,7 @@ class ParseGPX {
                                 "accuracy" -> currentRecord.accuracy = textValue.toFloat()
                                 "time" -> {
                                     val time = dateFormat.parse(textValue)
-                                    Log.i(TAG, time.toString())
+//                                    Log.i(TAG, time.toString())
                                     if (items.size == 0) {
                                         currentRecord.pointDelay = 0
                                         firstPointTimeStamp = time.time
@@ -63,7 +63,7 @@ class ParseGPX {
             }
         }
         catch (e: Exception) {
-            Log.i(TAG, e.toString())
+            Log.e(TAG, e.toString())
             status = false
         }
         return status
