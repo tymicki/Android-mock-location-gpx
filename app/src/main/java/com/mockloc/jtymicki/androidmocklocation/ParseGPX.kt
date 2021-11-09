@@ -48,6 +48,7 @@ class ParseGPX {
                                 "time" -> {
                                     val time = dateFormat.parse(textValue)
 //                                    Log.i(TAG, time.toString())
+                                    currentRecord.timestamp = time.time
                                     if (items.size == 0) {
                                         currentRecord.pointDelay = 0
                                         firstPointTimeStamp = time.time

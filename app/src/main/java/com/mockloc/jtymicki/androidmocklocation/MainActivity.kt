@@ -18,11 +18,20 @@ import android.util.Log
 import android.view.View
 import android.net.Uri
 import android.provider.DocumentsContract
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import com.google.android.gms.location.LocationServices
 import kotlinx.android.synthetic.main.activity_main.*
 
-data class TrackingPoint(var lat: Double = 0.0, var lon: Double = 0.0, var altitude: Double = 0.0, var accuracy: Float = 0f,
-                         var pointDelay: Long = 0)
+data class TrackingPoint(
+    var lat: Double = 0.0,
+    var lon: Double = 0.0,
+    var altitude: Double = 0.0,
+    var accuracy: Float = 0f,
+    var pointDelay: Long = 0,
+    var timestamp: Long = 0
+)
 
 private const val TAG = "MainActivity"
 private const val PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 1
@@ -32,6 +41,9 @@ private const val pickerInitialUri = "content://com.android.externalstorage.docu
 private const val OPEN_DOCUMENT_REQUEST_CODE = 10
 
 class MainActivity : AppCompatActivity() {
+
+    var mockRoute = MockRoute()
+    lateinit var timeMultiplerSpinner: Spinner
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +58,29 @@ class MainActivity : AppCompatActivity() {
             clearGPXMockLocations()
         }
         clearGPXMockLocations.visibility = View.GONE
+
+        timeMultiplerSpinner = findViewById<Spinner>(R.id.timeMultiplerSpinner)
+        val items = arrayOf("x1", "x2", "x5", "x10", "x25", "x100")
+        val adapter = ArrayAdapter<String>(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            items
+        )
+        timeMultiplerSpinner.setAdapter(adapter)
+        timeMultiplerSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                arg0: AdapterView<*>?,
+                arg1: View?,
+                arg2: Int,
+                arg3: Long
+            ) {
+                val item = timeMultiplerSpinner.selectedItem.toString().substring(1)
+                Log.i(TAG, "set time factor: $item")
+                mockRoute.timeFactor = item.toInt()
+            }
+
+            override fun onNothingSelected(arg0: AdapterView<*>?) {}
+        }
     }
 
 
@@ -134,7 +169,10 @@ class MainActivity : AppCompatActivity() {
             fusedLocationProviderClient.setMockMode(false)
             fusedLocationProviderClient.flushLocations()
         }
+        mockRoute.clearRoute()
         runGPXMockLocations.visibility = View.VISIBLE
+        timeMultiplerSpinner.visibility = View.VISIBLE
+        timeMultiplerTextView.visibility = View.VISIBLE
         clearGPXMockLocations.visibility = View.GONE
     }
 
@@ -188,8 +226,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun openDocument(documentUri: Uri) {
         runGPXMockLocations.visibility = View.GONE
+        timeMultiplerSpinner.visibility = View.GONE
+        timeMultiplerTextView.visibility = View.GONE
         clearGPXMockLocations.visibility = View.VISIBLE
-        MockRoute().pushMockRoute(this, documentUri)
+        mockRoute.pushMockRoute(this, documentUri)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {

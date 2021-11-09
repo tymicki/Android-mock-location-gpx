@@ -31,6 +31,33 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/runGPXMockLocations" />
 
+    <Spinner
+        android:id="@+id/timeMultiplerSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="96dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/timeMultiplerTextView"
+        app:layout_constraintTop_toBottomOf="@+id/clearGPXMockLocations"
+        app:layout_constraintVertical_bias="0.497" />
+
+    <TextView
+        android:id="@+id/timeMultiplerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="97dp"
+        android:text="Time multiplier"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/timeMultiplerSpinner"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clearGPXMockLocations"
+        app:layout_constraintVertical_bias="0.491" />
+
     <TextView
         android:id="@+id/mockLocationPermission"
         android:layout_width="0dp"
@@ -109,5 +136,6 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/readExternalStoragePermissionStatus" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
