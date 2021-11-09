@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Android mock location</string>
+    <string name="app_name">Mock location</string>
     <string name="run_gpx_mock_locations_button_text">run mock route</string>
     <string name="clear_gpx_mock_locations_button_text">clear mock route</string>
     <string name="mock_location_granted">Mock location set</string>
