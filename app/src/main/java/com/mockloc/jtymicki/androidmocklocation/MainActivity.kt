@@ -171,8 +171,6 @@ class MainActivity : AppCompatActivity() {
         }
         mockRoute.clearRoute()
         runGPXMockLocations.visibility = View.VISIBLE
-        timeMultiplerSpinner.visibility = View.VISIBLE
-        timeMultiplerTextView.visibility = View.VISIBLE
         clearGPXMockLocations.visibility = View.GONE
     }
 
@@ -226,8 +224,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun openDocument(documentUri: Uri) {
         runGPXMockLocations.visibility = View.GONE
-        timeMultiplerSpinner.visibility = View.GONE
-        timeMultiplerTextView.visibility = View.GONE
         clearGPXMockLocations.visibility = View.VISIBLE
         mockRoute.pushMockRoute(this, documentUri)
     }
