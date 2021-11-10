@@ -29,6 +29,7 @@ data class TrackingPoint(
     var lon: Double = 0.0,
     var altitude: Double = 0.0,
     var accuracy: Float = 0f,
+    var speed: Float = 0f,
     var pointDelay: Long = 0,
     var timestamp: Long = 0
 )

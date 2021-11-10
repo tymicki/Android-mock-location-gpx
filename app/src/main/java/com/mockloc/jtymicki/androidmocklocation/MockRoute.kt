@@ -44,13 +44,14 @@ class MockRoute {
                 if (hasLocationPermission(context)
                     && (lastLocationTimeMs < 0 || currentTimeMs - lastLocationTimeMs > MIN_UPDATE_INTERVAL_MS)
                 ) {
-                    Log.i(TAG, "pushing mock location lat=${item.lat} lon=${item.lon} alt=${item.altitude} acc=${item.accuracy} dT=${currentTimeMs - lastLocationTimeMs}")
+                    Log.i(TAG, "pushing mock location lat=${item.lat} lon=${item.lon} alt=${item.altitude} acc=${item.accuracy} speed=${item.speed} dT=${currentTimeMs - lastLocationTimeMs}")
 
                     val location = Location("MockProvider")
                     location.latitude = item.lat
                     location.longitude = item.lon
                     location.accuracy = item.accuracy
                     location.altitude = item.altitude
+                    location.speed = item.speed
                     location.time = currentTimeMs
                     location.elapsedRealtimeNanos = SystemClock.elapsedRealtimeNanos()
                     fusedLocationProviderClient.setMockMode(true)
