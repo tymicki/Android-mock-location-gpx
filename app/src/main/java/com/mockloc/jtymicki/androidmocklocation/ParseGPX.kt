@@ -10,7 +10,7 @@ private const val TAG = "ParseGPX"
 class ParseGPX {
     val items = ArrayList<TrackingPoint>()
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    var firstPointTimeStamp: Long = 0
+    var previousPointTimeStamp: Long = 0
 
 
     fun parse(xmlData: String): Boolean {
@@ -43,16 +43,19 @@ class ParseGPX {
                                     inItem = false
                                     currentRecord = TrackingPoint()
                                 }
-                                "ele" -> currentRecord.ele = textValue.toDouble()
+                                "ele" -> currentRecord.altitude = textValue.toDouble()
+                                "accuracy" -> currentRecord.accuracy = textValue.toFloat()
+                                "speed" -> currentRecord.speed = textValue.toFloat()
                                 "time" -> {
                                     val time = dateFormat.parse(textValue)
-                                    Log.i(TAG, time.toString())
+//                                    Log.i(TAG, time.toString())
+                                    currentRecord.timestamp = time.time
                                     if (items.size == 0) {
                                         currentRecord.pointDelay = 0
-                                        firstPointTimeStamp = time.time
                                     } else {
-                                        currentRecord.pointDelay = time.time - firstPointTimeStamp
+                                        currentRecord.pointDelay = time.time - previousPointTimeStamp
                                     }
+                                    previousPointTimeStamp = time.time
                                 }
                             }
                         }
@@ -62,7 +65,7 @@ class ParseGPX {
             }
         }
         catch (e: Exception) {
-            Log.i(TAG, e.toString())
+            Log.e(TAG, e.toString())
             status = false
         }
         return status

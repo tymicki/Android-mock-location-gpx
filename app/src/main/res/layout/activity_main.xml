@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,21 +11,57 @@
         android:id="@+id/runGPXMockLocations"
         android:layout_width="@dimen/button_width"
         android:layout_height="38dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="24dp"
         android:text="@string/run_gpx_mock_locations_button_text"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gpxFileNameLabel" />
+
+    <Button
+        android:id="@+id/clearGPXMockLocations"
+        android:layout_width="@dimen/button_width"
+        android:layout_height="38dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/clear_gpx_mock_locations_button_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/runGPXMockLocations" />
+
+    <Spinner
+        android:id="@+id/timeMultiplerSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="96dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/timeMultiplerTextView"
+        app:layout_constraintTop_toBottomOf="@+id/clearGPXMockLocations"
+        app:layout_constraintVertical_bias="0.497" />
+
+    <TextView
+        android:id="@+id/timeMultiplerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="97dp"
+        android:text="Time multiplier"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/timeMultiplerSpinner"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clearGPXMockLocations"
+        app:layout_constraintVertical_bias="0.491" />
 
     <TextView
         android:id="@+id/mockLocationPermission"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:text="@string/mock_location_not_granted"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
@@ -37,6 +73,7 @@
         android:id="@+id/enableMockLocation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="52dp"
         android:text="@string/enable_mock_location"
         android:textSize="10sp"
         android:visibility="visible"
@@ -47,37 +84,58 @@
         android:id="@+id/gpxFileLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="40dp"
         android:text="@string/gpx_file_label"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/readExternalStoragePermissionStatus" />
+        app:layout_constraintTop_toBottomOf="@+id/accessFineLocationPermissionStatus" />
 
     <TextView
         android:id="@+id/gpxFileNameLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:text="@string/gpx_file_name"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gpxFileLabel" />
 
     <TextView
-        android:id="@+id/readExternalStoragePermissionStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="51dp"
-        android:layout_marginLeft="8dp"
+        android:id="@+id/accessFineLocationPermissionStatus"
+        android:layout_width="397dp"
+        android:layout_height="27dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/access_fine_location_permission_not_granted"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/accessCoarseLocationPermissionStatus" />
+
+    <TextView
+        android:id="@+id/readExternalStoragePermissionStatus"
+        android:layout_width="389dp"
+        android:layout_height="31dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
         android:text="@string/read_external_storage_permission_not_granted"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mockLocationPermission" />
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/accessCoarseLocationPermissionStatus"
+        android:layout_width="398dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/access_coarse_location_permission_not_granted"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/readExternalStoragePermissionStatus" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

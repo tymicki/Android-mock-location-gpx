@@ -1,11 +1,16 @@
 <resources>
-    <string name="app_name">Android mock location</string>
+    <string name="app_name">Mock location</string>
     <string name="run_gpx_mock_locations_button_text">run mock route</string>
-    <string name="mock_location_granted">Mock location permission is granted</string>
-    <string name="mock_location_not_granted">Mock location not granted</string>
+    <string name="clear_gpx_mock_locations_button_text">clear mock route</string>
+    <string name="mock_location_granted">Mock location set</string>
+    <string name="mock_location_not_granted">Mock location not set</string>
     <string name="enable_mock_location">set mock location app</string>
     <string name="gpx_file_label">Mock location data must be put into:</string>
-    <string name="gpx_file_name">/sdcard/Download/mock_track.gpx</string>
-    <string name="read_external_storage_permission_not_granted">Read external storage permission not granted</string>
-    <string name="read_external_storage_permission_granted">Read external storage permission is granted</string>
+    <string name="gpx_file_name">/sdcard/Mocks/</string>
+    <string name="read_external_storage_permission_not_granted">Read external storage permission denied</string>
+    <string name="read_external_storage_permission_granted">Read external storage permission granted</string>
+    <string name="access_coarse_location_permission_not_granted">Coarse location permission denied</string>
+    <string name="access_coarse_location_permission_granted">Coarse location permission granted</string>
+    <string name="access_fine_location_permission_not_granted">Fine location permission denied</string>
+    <string name="access_fine_location_permission_granted">Fine location permission granted</string>
 </resources>

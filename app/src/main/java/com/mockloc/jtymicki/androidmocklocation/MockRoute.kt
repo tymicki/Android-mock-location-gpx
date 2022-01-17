@@ -1,54 +1,118 @@
 package com.mockloc.jtymicki.androidmocklocation
 
-import android.R
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
-import android.location.LocationManager
-import android.os.Environment
+import android.content.pm.PackageManager
+import android.location.Location
+import android.net.Uri
 import android.os.Handler
+import android.os.SystemClock
 import android.util.Log
-import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices.getFusedLocationProviderClient
 import java.io.BufferedReader
-import java.io.File
+import java.lang.Exception
 
 private const val TAG = "MockRoute"
-private const val MOCK_TRACK_DATA_FILENAME = "mock_track.gpx"
+private const val MIN_UPDATE_INTERVAL_MS = 500
 
 class MockRoute {
-    fun pushMockRoute(context: Context) {
-        if (isExternalStorageReadable()) {
-            Log.i(TAG, "externals storage is readable")
-            val downloadsPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath;
-            val file = File("""${downloadsPath}/${MOCK_TRACK_DATA_FILENAME}""")
-            if (file?.exists()) {
-                Log.i(TAG, "data file exists")
-                val bufferedReader: BufferedReader = file.bufferedReader()
-                val inputString = bufferedReader.use { it.readText() }
-                Log.i(TAG, inputString)
-                val parseGPX = ParseGPX()
-                parseGPX.parse(inputString)
-                val mockGPS = MockLocationProvider(LocationManager.GPS_PROVIDER, context)
-                val mockWifi = MockLocationProvider(LocationManager.NETWORK_PROVIDER, context)
-                val handler = Handler()
-                for (item in parseGPX.items) {
-                    Log.i(TAG, "pointDelay=${item.pointDelay}")
-                    handler.postDelayed({
-                        Log.i(TAG, "pushing mock location")
-                        Log.i(TAG, "lat= ${item.lat}")
-                        Log.i(TAG, "lon= ${item.lon}")
-                        Log.i(TAG, "ele= ${item.ele}")
-                        mockGPS?.pushLocation(item.lat, item.lon, item.ele, 0f)
-                        mockWifi?.pushLocation(item.lat, item.lon, item.ele, 0f)
-                    }, item.pointDelay)
+    var timeFactor = 1
+
+    private var lastLocationTimeMs: Long = -1
+    private lateinit var handler: Handler
+    private val parseGPX = ParseGPX()
+    private lateinit var context: Context
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
+    fun clearRoute(){
+        if(::handler.isInitialized){
+            handler.removeCallbacksAndMessages(null)
+        }
+        parseGPX.items.clear()
+    }
+
+    @SuppressLint("MissingPermission")
+    fun nextPoint(){
+        if(parseGPX.items.count() > 0){
+            val item = parseGPX.items.removeFirst()
+
+            try {
+                val currentTimeMs = System.currentTimeMillis()
+                if (hasLocationPermission(context)
+                    && (lastLocationTimeMs < 0 || currentTimeMs - lastLocationTimeMs > MIN_UPDATE_INTERVAL_MS)
+                ) {
+                    Log.i(TAG, "pushing mock location lat=${item.lat} lon=${item.lon} alt=${item.altitude} acc=${item.accuracy} speed=${item.speed} dT=${currentTimeMs - lastLocationTimeMs}")
+
+                    val location = Location("MockProvider")
+                    location.latitude = item.lat
+                    location.longitude = item.lon
+                    location.accuracy = item.accuracy
+                    location.altitude = item.altitude
+                    location.speed = item.speed
+                    location.time = currentTimeMs
+                    location.elapsedRealtimeNanos = SystemClock.elapsedRealtimeNanos()
+                    fusedLocationProviderClient.setMockMode(true)
+                    fusedLocationProviderClient.setMockLocation(location)
+                    lastLocationTimeMs = currentTimeMs
                 }
-            } else {
-                Log.i(TAG, "data file doesn't exist ${file.absolutePath}")
-                Toast.makeText(context, "data file doesn't exist", Toast.LENGTH_LONG).show()
+
+                // recurse after delay
+                val delay = item.pointDelay/timeFactor;
+//                Log.d(TAG, "pointDelay=${item.pointDelay} timeFactor=${timeFactor} delay=${delay}")
+                handler.postDelayed({
+                    nextPoint()
+                }, delay)
+
+            }catch (e : Exception){
+                if("provider is not a test provider".toRegex().containsMatchIn(e.localizedMessage)){
+                    Log.w(TAG, "NOT pushing mock location as mock providers not enabled")
+                    handler.removeCallbacksAndMessages(null)
+                    if (hasLocationPermission(context)) {
+                        fusedLocationProviderClient.setMockMode(false)
+                    }
+                }else{
+                    Log.e(TAG, e.localizedMessage)
+                }
             }
+        }else{
+            // end of GPX reached
+            clearRoute()
         }
     }
 
-    private fun isExternalStorageReadable(): Boolean {
-        return Environment.getExternalStorageState() in
-                setOf(Environment.MEDIA_MOUNTED, Environment.MEDIA_MOUNTED_READ_ONLY)
+    fun pushMockRoute(context: Context, fileUri: Uri) {
+        this.context = context
+        val inputStream = context.getContentResolver().openInputStream(fileUri)
+        if(inputStream == null){
+                throw Exception("File is empty")
+        }
+
+        val inputString = inputStream.bufferedReader().use(BufferedReader::readText)
+//        Log.d(TAG, inputString)
+
+        clearRoute(); // clear existing points
+        parseGPX.parse(inputString)
+        fusedLocationProviderClient = getFusedLocationProviderClient(context)
+
+
+        handler = Handler()
+
+        // start recursion over GPX points
+        nextPoint()
+    }
+
+    companion object{
+        fun hasLocationPermission(context: Context): Boolean{
+            return (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED)
+        }
     }
 }
