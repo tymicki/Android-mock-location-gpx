@@ -13,7 +13,6 @@ import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices.getFusedLocationProviderClient
 import java.io.BufferedReader
-import java.lang.Exception
 
 private const val TAG = "MockRoute"
 private const val MIN_UPDATE_INTERVAL_MS = 500
@@ -27,16 +26,16 @@ class MockRoute {
     private lateinit var context: Context
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
-    fun clearRoute(){
-        if(::handler.isInitialized){
+    fun clearRoute() {
+        if (::handler.isInitialized) {
             handler.removeCallbacksAndMessages(null)
         }
         parseGPX.items.clear()
     }
 
     @SuppressLint("MissingPermission")
-    fun nextPoint(){
-        if(parseGPX.items.count() > 0){
+    fun nextPoint() {
+        if (parseGPX.items.count() > 0) {
             val item = parseGPX.items.removeFirst()
 
             try {
@@ -44,7 +43,10 @@ class MockRoute {
                 if (hasLocationPermission(context)
                     && (lastLocationTimeMs < 0 || currentTimeMs - lastLocationTimeMs > MIN_UPDATE_INTERVAL_MS)
                 ) {
-                    Log.i(TAG, "pushing mock location lat=${item.lat} lon=${item.lon} alt=${item.altitude} acc=${item.accuracy} speed=${item.speed} dT=${currentTimeMs - lastLocationTimeMs}")
+                    Log.i(
+                        TAG,
+                        "pushing mock location lat=${item.lat} lon=${item.lon} alt=${item.altitude} acc=${item.accuracy} speed=${item.speed} dT=${currentTimeMs - lastLocationTimeMs}"
+                    )
 
                     val location = Location("MockProvider")
                     location.latitude = item.lat
@@ -60,24 +62,23 @@ class MockRoute {
                 }
 
                 // recurse after delay
-                val delay = item.pointDelay/timeFactor;
-//                Log.d(TAG, "pointDelay=${item.pointDelay} timeFactor=${timeFactor} delay=${delay}")
+                val delay = item.pointDelay / timeFactor
                 handler.postDelayed({
                     nextPoint()
                 }, delay)
 
-            }catch (e : Exception){
-                if("provider is not a test provider".toRegex().containsMatchIn(e.localizedMessage)){
+            } catch (e: Exception) {
+                if ("provider is not a test provider".toRegex().containsMatchIn(e.localizedMessage)) {
                     Log.w(TAG, "NOT pushing mock location as mock providers not enabled")
                     handler.removeCallbacksAndMessages(null)
                     if (hasLocationPermission(context)) {
                         fusedLocationProviderClient.setMockMode(false)
                     }
-                }else{
+                } else {
                     Log.e(TAG, e.localizedMessage)
                 }
             }
-        }else{
+        } else {
             // end of GPX reached
             clearRoute()
         }
@@ -85,15 +86,11 @@ class MockRoute {
 
     fun pushMockRoute(context: Context, fileUri: Uri) {
         this.context = context
-        val inputStream = context.getContentResolver().openInputStream(fileUri)
-        if(inputStream == null){
-                throw Exception("File is empty")
-        }
+        val inputStream = context.contentResolver.openInputStream(fileUri) ?: throw Exception("File is empty")
 
         val inputString = inputStream.bufferedReader().use(BufferedReader::readText)
-//        Log.d(TAG, inputString)
 
-        clearRoute(); // clear existing points
+        clearRoute() // clear existing points
         parseGPX.parse(inputString)
         fusedLocationProviderClient = getFusedLocationProviderClient(context)
 
@@ -104,8 +101,8 @@ class MockRoute {
         nextPoint()
     }
 
-    companion object{
-        fun hasLocationPermission(context: Context): Boolean{
+    companion object {
+        fun hasLocationPermission(context: Context): Boolean {
             return (ActivityCompat.checkSelfPermission(
                 context,
                 Manifest.permission.ACCESS_FINE_LOCATION

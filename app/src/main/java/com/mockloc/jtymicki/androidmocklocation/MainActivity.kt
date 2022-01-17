@@ -8,19 +8,19 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.DocumentsContract
 import android.provider.Settings
-import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityCompat.checkSelfPermission
-import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.View
-import android.net.Uri
-import android.provider.DocumentsContract
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityCompat.checkSelfPermission
 import com.google.android.gms.location.LocationServices
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -36,7 +36,6 @@ data class TrackingPoint(
 
 private const val TAG = "MainActivity"
 private const val PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 1
-private const val PERMISSION_REQUEST_ACCESS_FINE_LOCATION = 2
 private const val PERMISSION_REQUEST_ACCESS_COARSE_LOCATION = 3
 private const val pickerInitialUri = "content://com.android.externalstorage.documents/document/primary%3AMocks"
 private const val OPEN_DOCUMENT_REQUEST_CODE = 10
@@ -44,7 +43,7 @@ private const val OPEN_DOCUMENT_REQUEST_CODE = 10
 class MainActivity : AppCompatActivity() {
 
     var mockRoute = MockRoute()
-    lateinit var timeMultiplerSpinner: Spinner
+    lateinit var timeMultiplierSpinner: Spinner
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,22 +59,22 @@ class MainActivity : AppCompatActivity() {
         }
         clearGPXMockLocations.visibility = View.GONE
 
-        timeMultiplerSpinner = findViewById<Spinner>(R.id.timeMultiplerSpinner)
+        timeMultiplierSpinner = findViewById(R.id.timeMultiplierSpinner)
         val items = arrayOf("x1", "x2", "x5", "x10", "x25", "x100")
-        val adapter = ArrayAdapter<String>(
+        val adapter = ArrayAdapter(
             this,
             android.R.layout.simple_spinner_dropdown_item,
             items
         )
-        timeMultiplerSpinner.setAdapter(adapter)
-        timeMultiplerSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        timeMultiplierSpinner.adapter = adapter
+        timeMultiplierSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 arg0: AdapterView<*>?,
                 arg1: View?,
                 arg2: Int,
                 arg3: Long
             ) {
-                val item = timeMultiplerSpinner.selectedItem.toString().substring(1)
+                val item = timeMultiplierSpinner.selectedItem.toString().substring(1)
                 Log.i(TAG, "set time factor: $item")
                 mockRoute.timeFactor = item.toInt()
             }
@@ -110,24 +109,31 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkReadExternalStoragePermission(requestIfNotGranted: Boolean = false): Boolean {
-        var granted = false
-        if (checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+        val granted: Boolean = if (checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             Log.i(TAG, "READ_EXTERNAL_STORAGE granted ")
             readExternalStoragePermissionStatus.setText(R.string.read_external_storage_permission_granted)
             readExternalStoragePermissionStatus.setTextColor(Color.GREEN)
-            granted = true
+            true
         } else {
             readExternalStoragePermissionStatus.setText(R.string.read_external_storage_permission_not_granted)
             readExternalStoragePermissionStatus.setTextColor(Color.RED)
-            if(requestIfNotGranted) ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), PERMISSION_REQUEST_READ_EXTERNAL_STORAGE)
-            granted = false
+            if (requestIfNotGranted) ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                PERMISSION_REQUEST_READ_EXTERNAL_STORAGE
+            )
+            false
         }
         return granted
     }
 
     private fun checkCoarseLocationPermission(requestIfNotGranted: Boolean = false): Boolean {
-        var granted = false
-        if (checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        val granted: Boolean
+        if (checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
             Log.i(TAG, "ACCESS_COARSE_LOCATION granted ")
             accessCoarseLocationPermissionStatus.setText(R.string.access_coarse_location_permission_granted)
             accessCoarseLocationPermissionStatus.setTextColor(Color.GREEN)
@@ -135,30 +141,37 @@ class MainActivity : AppCompatActivity() {
         } else {
             accessCoarseLocationPermissionStatus.setText(R.string.access_coarse_location_permission_not_granted)
             accessCoarseLocationPermissionStatus.setTextColor(Color.RED)
-            if(requestIfNotGranted) ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), PERMISSION_REQUEST_ACCESS_COARSE_LOCATION)
+            if (requestIfNotGranted) ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+                PERMISSION_REQUEST_ACCESS_COARSE_LOCATION
+            )
             granted = false
         }
         return granted
     }
 
     private fun checkFineLocationPermission(requestIfNotGranted: Boolean = false): Boolean {
-        var granted = false
-        if (checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        val granted: Boolean = if (checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             Log.i(TAG, "ACCESS_COARSE_LOCATION granted ")
             accessFineLocationPermissionStatus.setText(R.string.access_fine_location_permission_granted)
             accessFineLocationPermissionStatus.setTextColor(Color.GREEN)
-            granted = true
+            true
         } else {
             accessFineLocationPermissionStatus.setText(R.string.access_fine_location_permission_not_granted)
             accessFineLocationPermissionStatus.setTextColor(Color.RED)
-            if(requestIfNotGranted) ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_REQUEST_ACCESS_COARSE_LOCATION)
-            granted = false
+            if (requestIfNotGranted) ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                PERMISSION_REQUEST_ACCESS_COARSE_LOCATION
+            )
+            false
         }
         return granted
     }
 
     private fun loadGPXMockLocations() {
-        if(checkReadExternalStoragePermission() && checkCoarseLocationPermission() && checkFineLocationPermission()){
+        if (checkReadExternalStoragePermission() && checkCoarseLocationPermission() && checkFineLocationPermission()) {
             openDocumentPicker()
         }
     }
@@ -166,7 +179,7 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("MissingPermission")
     private fun clearGPXMockLocations() {
         val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-        if(MockRoute.Companion.hasLocationPermission(this)){
+        if (MockRoute.hasLocationPermission(this)) {
             fusedLocationProviderClient.setMockMode(false)
             fusedLocationProviderClient.flushLocations()
         }
@@ -192,12 +205,14 @@ class MainActivity : AppCompatActivity() {
         isMockLocation = try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 val opsManager = this.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
-                opsManager.checkOp(AppOpsManager.OPSTR_MOCK_LOCATION,
-                        android.os.Process.myUid(),
-                        BuildConfig.APPLICATION_ID) == AppOpsManager.MODE_ALLOWED
+                opsManager.checkOp(
+                    AppOpsManager.OPSTR_MOCK_LOCATION,
+                    android.os.Process.myUid(),
+                    BuildConfig.APPLICATION_ID
+                ) == AppOpsManager.MODE_ALLOWED
             } else {
                 // in marshmallow this will always return true
-                android.provider.Settings.Secure.getString(this.contentResolver, "mock_location") != "0"
+                Settings.Secure.getString(this.contentResolver, "mock_location") != "0"
             }
         } catch (e: Exception) {
             return isMockLocation
@@ -219,7 +234,7 @@ class MainActivity : AppCompatActivity() {
              */
             addCategory(Intent.CATEGORY_OPENABLE)
         }
-        intent.setType("*/*")
+        intent.type = "*/*"
         startActivityForResult(intent, OPEN_DOCUMENT_REQUEST_CODE)
     }
 
@@ -234,7 +249,7 @@ class MainActivity : AppCompatActivity() {
 
         if (requestCode == OPEN_DOCUMENT_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             resultData?.data?.also { documentUri ->
-                Log.d(TAG, "Loaded document: $documentUri");
+                Log.d(TAG, "Loaded document: $documentUri")
                 contentResolver.takePersistableUriPermission(
                     documentUri,
                     Intent.FLAG_GRANT_READ_URI_PERMISSION

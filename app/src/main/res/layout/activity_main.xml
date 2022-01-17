@@ -32,7 +32,7 @@
         app:layout_constraintTop_toBottomOf="@+id/runGPXMockLocations" />
 
     <Spinner
-        android:id="@+id/timeMultiplerSpinner"
+        android:id="@+id/timeMultiplierSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -40,19 +40,19 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/timeMultiplerTextView"
+        app:layout_constraintStart_toEndOf="@+id/timeMultiplierTextView"
         app:layout_constraintTop_toBottomOf="@+id/clearGPXMockLocations"
         app:layout_constraintVertical_bias="0.497" />
 
     <TextView
-        android:id="@+id/timeMultiplerTextView"
+        android:id="@+id/timeMultiplierTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="97dp"
         android:text="Time multiplier"
         android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/timeMultiplerSpinner"
+        app:layout_constraintEnd_toStartOf="@+id/timeMultiplierSpinner"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/clearGPXMockLocations"

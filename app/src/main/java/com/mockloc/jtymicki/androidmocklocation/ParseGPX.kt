@@ -10,7 +10,7 @@ private const val TAG = "ParseGPX"
 class ParseGPX {
     val items = ArrayList<TrackingPoint>()
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    var previousPointTimeStamp: Long = 0
+    private var previousPointTimeStamp: Long = 0
 
 
     fun parse(xmlData: String): Boolean {
@@ -48,7 +48,6 @@ class ParseGPX {
                                 "speed" -> currentRecord.speed = textValue.toFloat()
                                 "time" -> {
                                     val time = dateFormat.parse(textValue)
-//                                    Log.i(TAG, time.toString())
                                     currentRecord.timestamp = time.time
                                     if (items.size == 0) {
                                         currentRecord.pointDelay = 0
